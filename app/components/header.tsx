@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 export default function Header() {
     const pathname = usePathname()
 
-    const linkClass = (href) =>
+    const linkClass = (href: string) =>
         `px-4 py-2 rounded-md text-sm transition-colors duration-150 ${
             pathname === href && pathname !== "/"
                 ? "text-secondary bg-secondary/10 font-medium"

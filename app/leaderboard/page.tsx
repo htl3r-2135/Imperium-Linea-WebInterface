@@ -1,12 +1,166 @@
+'use client'
+
 import Header from "@/app/components/header";
+import {formatMs} from "@/lib/timeformatter";
+import {useState} from "react";
+import {UserRecord} from "@/type/UserRecord";
+
+function crownSvg() {
+	return (
+		<div className="w-4 h-4">
+			<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+				<g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
+				<g id="SVGRepo_iconCarrier">
+					<path
+						d="M20.4329 14.1733C20.4772 13.7615 20.1792 13.3917 19.7674 13.3474C19.3556 13.3031 18.9858 13.601 18.9415 14.0129L20.4329 14.1733ZM4.3128 14.0931L3.5671 14.1733L4.3128 14.0931ZM4.12945 12.3884L4.87514 12.3082L4.12945 12.3884ZM8.76006 10.934L9.41507 11.2993L8.76006 10.934ZM10.5495 7.7254L9.89453 7.36008L10.5495 7.7254ZM13.4505 7.7254L12.7954 8.09071L13.4505 7.7254ZM15.2399 10.934L15.895 10.5686V10.5686L15.2399 10.934ZM16.0038 11.9592L15.7015 12.6456L15.7015 12.6456L16.0038 11.9592ZM17.4705 11.2451L16.9412 10.7138L17.4705 11.2451ZM16.4533 12.0219L16.3506 11.2789L16.3506 11.2789L16.4533 12.0219ZM6.5295 11.2451L6.0002 11.7765L6.5295 11.2451ZM7.5467 12.0219L7.64943 11.2789L7.64943 11.2789L7.5467 12.0219ZM7.99621 11.9592L8.29846 12.6456L8.29846 12.6456L7.99621 11.9592ZM5.71208 20.1532L6.21228 19.5943H6.21228L5.71208 20.1532ZM18.2879 20.1532L17.7877 19.5943L18.2879 20.1532ZM19.9823 10.4999L19.9736 11.2498L19.9823 10.4999ZM18.8645 9.98013L19.432 9.48982L18.8645 9.98013ZM12.9077 6.78265L12.5668 6.11457L12.9077 6.78265ZM11.0923 6.78265L11.4332 6.11457L11.0923 6.78265ZM13.0879 20.25H10.9121V21.75H13.0879V20.25ZM5.0585 14.0129L4.87514 12.3082L3.38375 12.4686L3.5671 14.1733L5.0585 14.0129ZM9.41507 11.2993L11.2046 8.09072L9.89453 7.36008L8.10504 10.5686L9.41507 11.2993ZM12.7954 8.09071L14.5849 11.2993L15.895 10.5686L14.1055 7.36008L12.7954 8.09071ZM14.5849 11.2993C14.7467 11.5893 14.8956 11.8582 15.0399 12.0638C15.1885 12.2753 15.3911 12.5089 15.7015 12.6456L16.306 11.2728C16.3619 11.2973 16.3524 11.3226 16.2675 11.2018C16.1784 11.0749 16.0727 10.8873 15.895 10.5686L14.5849 11.2993ZM16.9412 10.7138C16.6825 10.9715 16.529 11.1231 16.4082 11.2208C16.2931 11.3139 16.2906 11.2872 16.3506 11.2789L16.556 12.7648C16.8918 12.7184 17.1507 12.5495 17.3517 12.3869C17.547 12.2289 17.7642 12.0112 17.9998 11.7765L16.9412 10.7138ZM15.7015 12.6456C15.9698 12.7637 16.2657 12.8049 16.556 12.7648L16.3506 11.2789C16.3353 11.281 16.3199 11.2789 16.306 11.2728L15.7015 12.6456ZM6.0002 11.7765C6.23578 12.0112 6.453 12.2289 6.64834 12.3869C6.84933 12.5495 7.10824 12.7184 7.44397 12.7648L7.64943 11.2789C7.70944 11.2872 7.7069 11.3139 7.5918 11.2208C7.47104 11.1231 7.31753 10.9715 7.05879 10.7138L6.0002 11.7765ZM8.10504 10.5686C7.92732 10.8873 7.82158 11.0749 7.7325 11.2018C7.64765 11.3226 7.63814 11.2973 7.69395 11.2728L8.29846 12.6456C8.60887 12.5089 8.81155 12.2753 8.96009 12.0638C9.10441 11.8583 9.2533 11.5893 9.41507 11.2993L8.10504 10.5686ZM7.44397 12.7648C7.73429 12.8049 8.03016 12.7637 8.29846 12.6456L7.69395 11.2728C7.68011 11.2789 7.66466 11.281 7.64943 11.2789L7.44397 12.7648ZM10.9121 20.25C9.47421 20.25 8.46719 20.2486 7.69857 20.1502C6.9509 20.0545 6.52851 19.8774 6.21228 19.5943L5.21187 20.712C5.84173 21.2758 6.60137 21.522 7.50819 21.6381C8.39406 21.7514 9.51399 21.75 10.9121 21.75V20.25ZM3.5671 14.1733C3.71526 15.5507 3.83282 16.8999 4.03322 17.994C4.1343 18.5459 4.26178 19.0659 4.43833 19.5172C4.61339 19.9648 4.8549 20.3925 5.21187 20.712L6.21228 19.5943C6.0962 19.4904 5.96405 19.3 5.83525 18.9708C5.70795 18.6454 5.60138 18.2299 5.50868 17.7238C5.32149 16.7018 5.21246 15.4443 5.0585 14.0129L3.5671 14.1733ZM18.9415 14.0129C18.7875 15.4443 18.6785 16.7018 18.4913 17.7238C18.3986 18.2299 18.292 18.6454 18.1647 18.9708C18.036 19.3 17.9038 19.4904 17.7877 19.5943L18.7881 20.712C19.1451 20.3925 19.3866 19.9648 19.5617 19.5172C19.7382 19.0659 19.8657 18.5459 19.9668 17.994C20.1672 16.8999 20.2847 15.5507 20.4329 14.1733L18.9415 14.0129ZM13.0879 21.75C14.486 21.75 15.6059 21.7514 16.4918 21.6381C17.3986 21.522 18.1583 21.2758 18.7881 20.712L17.7877 19.5943C17.4715 19.8774 17.0491 20.0545 16.3014 20.1502C15.5328 20.2486 14.5258 20.25 13.0879 20.25V21.75ZM10.75 5C10.75 4.30964 11.3096 3.75 12 3.75V2.25C10.4812 2.25 9.25 3.48122 9.25 5H10.75ZM12 3.75C12.6904 3.75 13.25 4.30964 13.25 5H14.75C14.75 3.48122 13.5188 2.25 12 2.25V3.75ZM20.75 9C20.75 9.41421 20.4142 9.75 20 9.75V11.25C21.2426 11.25 22.25 10.2426 22.25 9H20.75ZM19.25 9C19.25 8.58579 19.5858 8.25 20 8.25V6.75C18.7574 6.75 17.75 7.75736 17.75 9H19.25ZM20 8.25C20.4142 8.25 20.75 8.58579 20.75 9H22.25C22.25 7.75736 21.2426 6.75 20 6.75V8.25ZM4 9.75C3.58579 9.75 3.25 9.41421 3.25 9H1.75C1.75 10.2426 2.75736 11.25 4 11.25V9.75ZM3.25 9C3.25 8.58579 3.58579 8.25 4 8.25V6.75C2.75736 6.75 1.75 7.75736 1.75 9H3.25ZM4 8.25C4.41421 8.25 4.75 8.58579 4.75 9H6.25C6.25 7.75736 5.24264 6.75 4 6.75V8.25ZM20 9.75C19.997 9.75 19.994 9.74998 19.991 9.74995L19.9736 11.2498C19.9824 11.2499 19.9912 11.25 20 11.25V9.75ZM19.991 9.74995C19.7681 9.74737 19.5689 9.64827 19.432 9.48982L18.2969 10.4704C18.703 10.9405 19.3032 11.2421 19.9736 11.2498L19.991 9.74995ZM19.432 9.48982C19.3181 9.35799 19.25 9.18789 19.25 9H17.75C17.75 9.56143 17.9566 10.0765 18.2969 10.4704L19.432 9.48982ZM17.9998 11.7765C18.6773 11.1017 19.0262 10.7616 19.2584 10.6183L18.4705 9.34191C18.0506 9.60109 17.547 10.1103 16.9412 10.7138L17.9998 11.7765ZM4.75 9C4.75 9.18789 4.68188 9.35799 4.56799 9.48982L5.70307 10.4704C6.0434 10.0765 6.25 9.56143 6.25 9H4.75ZM7.05879 10.7138C6.45296 10.1103 5.94936 9.60109 5.52946 9.34191L4.7416 10.6183C4.97377 10.7616 5.32273 11.1017 6.0002 11.7765L7.05879 10.7138ZM4.56799 9.48982C4.4311 9.64827 4.23192 9.74737 4.00904 9.74995L4.02639 11.2498C4.69676 11.2421 5.29701 10.9405 5.70307 10.4704L4.56799 9.48982ZM4.00904 9.74995C4.00602 9.74998 4.00301 9.75 4 9.75V11.25C4.00881 11.25 4.01761 11.2499 4.02639 11.2498L4.00904 9.74995ZM4.87514 12.3082C4.82571 11.8486 4.78687 11.4865 4.76601 11.192C4.74467 10.8908 4.74636 10.7093 4.76107 10.5995L3.27435 10.4003C3.23837 10.6689 3.24701 10.9769 3.26976 11.298C3.29298 11.6258 3.33535 12.0187 3.38375 12.4686L4.87514 12.3082ZM13.25 5C13.25 5.48504 12.9739 5.90689 12.5668 6.11457L13.2485 7.45073C14.1381 6.99685 14.75 6.07053 14.75 5H13.25ZM12.5668 6.11457C12.3975 6.20095 12.2056 6.25 12 6.25V7.75C12.448 7.75 12.873 7.6423 13.2485 7.45073L12.5668 6.11457ZM14.1055 7.36008C13.8992 6.9902 13.7138 6.65746 13.5437 6.3852L12.2716 7.1801C12.4176 7.41372 12.5828 7.70948 12.7954 8.09071L14.1055 7.36008ZM12 6.25C11.7944 6.25 11.6025 6.20095 11.4332 6.11457L10.7515 7.45073C11.127 7.6423 11.552 7.75 12 7.75V6.25ZM11.4332 6.11457C11.0261 5.90689 10.75 5.48504 10.75 5H9.25C9.25 6.07053 9.86186 6.99685 10.7515 7.45073L11.4332 6.11457ZM11.2046 8.09072C11.4172 7.70948 11.5824 7.41372 11.7284 7.1801L10.4563 6.3852C10.2862 6.65746 10.1008 6.9902 9.89453 7.36008L11.2046 8.09072Z"
+						fill="#f1f1f166">
+					</path>
+				</g>
+			</svg>
+		</div>)
+}
+
 
 export default function Leaderboard() {
-    return (
-        <div className="flex flex-col flex-1 items-center justify-center bg-background font-sans">
-            <Header theme="leaderboard" />
-            <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-background dark:bg-background sm:items-start">
-                <h1>Leaderboard</h1>
-            </main>
-        </div>
-    );
+	const users: UserRecord[] = [
+		{username: "silent_fox42", time: 4821000, timestamp: 1735898400000},
+		{username: "lunar_drift", time: 13047000, timestamp: 1736244000000},
+		{username: "neon_rabbit99", time: 892000, timestamp: 1736589600000},
+		{username: "cracked_yolk", time: 27634000, timestamp: 1736935200000},
+		{username: "turbo_mango", time: 5103000, timestamp: 1737280800000},
+		{username: "void_walker7", time: 19872000, timestamp: 1737540000000},
+		{username: "pixel_ghost", time: 3341000, timestamp: 1737799200000},
+		{username: "frosty_penguin", time: 11209000, timestamp: 1738058400000},
+		{username: "smoked_circuit", time: 7654000, timestamp: 1738404000000},
+		{username: "delta_waffle", time: 22410000, timestamp: 1738663200000},
+		{username: "glitch_panther", time: 561000, timestamp: 1738922400000},
+		{username: "rusty_comet", time: 3098700, timestamp: 1739181600000},
+		{username: "blazing_kiwi", time: 8800000, timestamp: 1739440800000},
+		{username: "chrome_specter", time: 16533000, timestamp: 1739786400000},
+		{username: "dizzy_narwhal", time: 2278000, timestamp: 1740045600000},
+		{username: "phantom_surge", time: 25190000, timestamp: 1740304800000},
+		{username: "wired_toucan", time: 4432100, timestamp: 1740564000000},
+		{username: "stray_electron", time: 6789000, timestamp: 1740909600000},
+		{username: "amber_vortex", time: 14456000, timestamp: 1741168800000},
+		{username: "frozen_axiom", time: 3012000, timestamp: 1741428000000},
+		{username: "nova_ferret", time: 38204000, timestamp: 1741687200000},
+		{username: "cobalt_wraith", time: 9981000, timestamp: 1741946400000},
+		{username: "tangled_prism", time: 17742000, timestamp: 1742205600000},
+		{username: "swift_cactus", time: 4490000, timestamp: 1742464800000},
+		{username: "echo_basilisk", time: 51023000, timestamp: 1742724000000},
+		{username: "drifting_quark", time: 1337000, timestamp: 1742983200000},
+		{username: "jade_nomad", time: 20864000, timestamp: 1743242400000},
+		{username: "fuzzy_satellite", time: 8123000, timestamp: 1743501600000},
+		{username: "hazy_condor", time: 2900000, timestamp: 1743760800000},
+		{username: "rogue_isotope", time: 33571000, timestamp: 1744020000000},
+		{username: "tidal_mongoose", time: 7410000, timestamp: 1744279200000},
+		{username: "solar_badger", time: 15882000, timestamp: 1744452000000},
+		{username: "carbon_specter", time: 4107000, timestamp: 1744624800000},
+		{username: "numb_photon", time: 47899000, timestamp: 1744797600000},
+		{username: "lazy_neutron", time: 9234000, timestamp: 1744970400000},
+		{username: "blaze_raccoon", time: 12058000, timestamp: 1745056800000},
+		{username: "ultra_mollusk", time: 5567000, timestamp: 1745143200000},
+		{username: "binary_gecko", time: 28943000, timestamp: 1745229600000},
+		{username: "hyper_sloth", time: 3921000, timestamp: 1745316000000},
+		{username: "cosmic_otter", time: 1820000, timestamp: 1745402400000},
+		{username: "hollow_quasar", time: 18374000, timestamp: 1745488800000},
+		{username: "storm_capybara", time: 6641000, timestamp: 1745575200000},
+		{username: "neon_drifter88", time: 31102000, timestamp: 1745661600000},
+		{username: "broken_axiom", time: 743000, timestamp: 1745661600000},
+		{username: "glowing_mantis", time: 10559000, timestamp: 1745748000000},
+		{username: "static_lemur", time: 23487000, timestamp: 1745748000000},
+		{username: "raw_nebula", time: 3398000, timestamp: 1745834400000},
+		{username: "digital_moose", time: 14720000, timestamp: 1745834400000},
+		{username: "quantum_shrimp", time: 8051000, timestamp: 1745920800000},
+		{username: "turbo_platypus", time: 19603000, timestamp: 1745920800000},
+	];
+
+	const sorted = [...users].sort((b, a) => a.time - b.time);
+
+	const [search, setSearch] = useState("");
+
+	const filtered = sorted.filter((user) =>
+		user.username.toLowerCase().includes(search.toLowerCase())
+	);
+
+	return (
+		<div className="flex flex-col flex-1 items-center justify-center bg-background font-sans">
+			<Header/>
+			<main className="flex flex-1 w-full max-w-6xl flex-col gap-12 py-32 px-16">
+
+				<section>
+					<h2 className="text-lg font-semibold text-foreground mb-1">Information</h2>
+					<p className="text-sm text-foreground/60">Showing {filtered.length} of {users.length} users, sorted by longest time.</p>
+				</section>
+
+				<section>
+					<div className="flex items-center justify-between mb-4">
+						<h2 className="text-lg font-semibold text-foreground">Leaderboard</h2>
+						<input
+							type="text"
+							placeholder="Search users..."
+							value={search}
+							onChange={(e) => setSearch(e.target.value)}
+							className="text-sm px-3 py-1.5 rounded-md border border-foreground/10 bg-foreground/5 text-foreground placeholder:text-foreground/30 focus:outline-none focus:border-secondary/50 w-48"
+						/>
+					</div>
+
+					<div className="rounded-lg overflow-hidden border border-foreground/10">
+						<table className="w-full text-sm text-left">
+							<thead>
+							<tr className="bg-secondary/10 text-secondary uppercase text-xs tracking-wider">
+								<th className="px-4 py-3 font-semibold">#</th>
+								<th className="px-4 py-3 font-semibold">Name</th>
+								<th className="px-4 py-3 font-semibold">Time</th>
+								<th className="px-4 py-3 font-semibold">Date</th>
+							</tr>
+							</thead>
+							<tbody>
+							{filtered.length > 0 ? filtered.map((user, index) => {
+								const globalRank = sorted.indexOf(user);
+								return (
+									<tr
+										key={user.username}
+										className="border-t border-foreground/10 hover:bg-foreground/5 transition-colors"
+									>
+										<td className="px-4 py-3 text-foreground/40 font-mono">
+											<div className="flex items-center justify-center w-4">
+												{globalRank === 0 ? crownSvg() : (globalRank + 1)}
+											</div>
+										</td>
+										<td className="px-4 py-3 text-foreground font-medium">{user.username}</td>
+										<td className="px-4 py-3 text-secondary font-mono">{formatMs(user.time)}</td>
+										<td className="px-4 py-3 text-foreground/60">
+											{new Date(user.timestamp).toLocaleDateString("en-GB", {
+												day: "2-digit",
+												month: "short",
+												year: "numeric",
+											})}
+										</td>
+									</tr>
+								);
+							}) : (
+								<tr>
+									<td colSpan={4} className="px-4 py-6 text-center text-foreground/30 text-sm">
+										No users found matching "{search}"
+									</td>
+								</tr>
+							)}
+							</tbody>
+							<tfoot>
+							<tr className="border-t border-foreground/10 bg-foreground/5">
+								<td colSpan={4} className="px-4 py-3 text-xs text-foreground/40">
+									{users.length} users total · Survived the longest: <span
+									className="text-secondary">{sorted[0].username}</span> with {formatMs(sorted[0].time)}
+								</td>
+							</tr>
+							</tfoot>
+						</table>
+					</div>
+				</section>
+
+			</main>
+		</div>
+	);
 }
