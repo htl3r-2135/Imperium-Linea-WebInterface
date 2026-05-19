@@ -1,9 +1,9 @@
 'use client'
 
 import Header from "@/app/components/header";
-import {formatMs} from "@/lib/timeformatter";
-import {useState} from "react";
-import {UserRecord} from "@/type/UserRecord";
+import { formatMs } from "@/lib/timeformatter";
+import { useState, useEffect } from "react";
+import { UserRecord } from "@/type/UserRecord";
 
 function crownSvg() {
 	return (
@@ -21,77 +21,40 @@ function crownSvg() {
 		</div>)
 }
 
-
 export default function Leaderboard() {
-	const users: UserRecord[] = [
-		{username: "silent_fox42", time: 4821000, timestamp: 1735898400000},
-		{username: "lunar_drift", time: 13047000, timestamp: 1736244000000},
-		{username: "neon_rabbit99", time: 892000, timestamp: 1736589600000},
-		{username: "cracked_yolk", time: 27634000, timestamp: 1736935200000},
-		{username: "turbo_mango", time: 5103000, timestamp: 1737280800000},
-		{username: "void_walker7", time: 19872000, timestamp: 1737540000000},
-		{username: "pixel_ghost", time: 3341000, timestamp: 1737799200000},
-		{username: "frosty_penguin", time: 11209000, timestamp: 1738058400000},
-		{username: "smoked_circuit", time: 7654000, timestamp: 1738404000000},
-		{username: "delta_waffle", time: 22410000, timestamp: 1738663200000},
-		{username: "glitch_panther", time: 561000, timestamp: 1738922400000},
-		{username: "rusty_comet", time: 3098700, timestamp: 1739181600000},
-		{username: "blazing_kiwi", time: 8800000, timestamp: 1739440800000},
-		{username: "chrome_specter", time: 16533000, timestamp: 1739786400000},
-		{username: "dizzy_narwhal", time: 2278000, timestamp: 1740045600000},
-		{username: "phantom_surge", time: 25190000, timestamp: 1740304800000},
-		{username: "wired_toucan", time: 4432100, timestamp: 1740564000000},
-		{username: "stray_electron", time: 6789000, timestamp: 1740909600000},
-		{username: "amber_vortex", time: 14456000, timestamp: 1741168800000},
-		{username: "frozen_axiom", time: 3012000, timestamp: 1741428000000},
-		{username: "nova_ferret", time: 38204000, timestamp: 1741687200000},
-		{username: "cobalt_wraith", time: 9981000, timestamp: 1741946400000},
-		{username: "tangled_prism", time: 17742000, timestamp: 1742205600000},
-		{username: "swift_cactus", time: 4490000, timestamp: 1742464800000},
-		{username: "echo_basilisk", time: 51023000, timestamp: 1742724000000},
-		{username: "drifting_quark", time: 1337000, timestamp: 1742983200000},
-		{username: "jade_nomad", time: 20864000, timestamp: 1743242400000},
-		{username: "fuzzy_satellite", time: 8123000, timestamp: 1743501600000},
-		{username: "hazy_condor", time: 2900000, timestamp: 1743760800000},
-		{username: "rogue_isotope", time: 33571000, timestamp: 1744020000000},
-		{username: "tidal_mongoose", time: 7410000, timestamp: 1744279200000},
-		{username: "solar_badger", time: 15882000, timestamp: 1744452000000},
-		{username: "carbon_specter", time: 4107000, timestamp: 1744624800000},
-		{username: "numb_photon", time: 47899000, timestamp: 1744797600000},
-		{username: "lazy_neutron", time: 9234000, timestamp: 1744970400000},
-		{username: "blaze_raccoon", time: 12058000, timestamp: 1745056800000},
-		{username: "ultra_mollusk", time: 5567000, timestamp: 1745143200000},
-		{username: "binary_gecko", time: 28943000, timestamp: 1745229600000},
-		{username: "hyper_sloth", time: 3921000, timestamp: 1745316000000},
-		{username: "cosmic_otter", time: 1820000, timestamp: 1745402400000},
-		{username: "hollow_quasar", time: 18374000, timestamp: 1745488800000},
-		{username: "storm_capybara", time: 6641000, timestamp: 1745575200000},
-		{username: "neon_drifter88", time: 31102000, timestamp: 1745661600000},
-		{username: "broken_axiom", time: 743000, timestamp: 1745661600000},
-		{username: "glowing_mantis", time: 10559000, timestamp: 1745748000000},
-		{username: "static_lemur", time: 23487000, timestamp: 1745748000000},
-		{username: "raw_nebula", time: 3398000, timestamp: 1745834400000},
-		{username: "digital_moose", time: 14720000, timestamp: 1745834400000},
-		{username: "quantum_shrimp", time: 8051000, timestamp: 1745920800000},
-		{username: "turbo_platypus", time: 19603000, timestamp: 1745920800000},
-	];
-
-	const sorted = [...users].sort((b, a) => a.time - b.time);
-
+	const [users, setUsers] = useState<UserRecord[]>([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
 	const [search, setSearch] = useState("");
 
+	useEffect(() => {
+		fetch("/api/leaderboard")
+			.then((res) => {
+				if (!res.ok) throw new Error("Failed to fetch leaderboard");
+				return res.json();
+			})
+			.then((data) => setUsers(data))
+			.catch((err) => setError(err.message))
+			.finally(() => setLoading(false));
+	}, []);
+
+	const sorted = [...users].sort((a, b) => b.time - a.time);
 	const filtered = sorted.filter((user) =>
 		user.username.toLowerCase().includes(search.toLowerCase())
 	);
 
 	return (
 		<div className="flex flex-col flex-1 items-center justify-center bg-background font-sans">
-			<Header/>
+			<Header />
 			<main className="flex flex-1 w-full max-w-6xl flex-col gap-12 py-32 px-16">
 
 				<section>
 					<h2 className="text-lg font-semibold text-foreground mb-1">Information</h2>
-					<p className="text-sm text-foreground/60">Showing {filtered.length} of {users.length} users, sorted by longest time.</p>
+					<p className="text-sm text-foreground/60">
+						{loading
+							? "Loading..."
+							: `Showing ${filtered.length} of ${users.length} users, sorted by longest time.`}
+					</p>
 				</section>
 
 				<section>
@@ -117,7 +80,19 @@ export default function Leaderboard() {
 							</tr>
 							</thead>
 							<tbody>
-							{filtered.length > 0 ? filtered.map((user, index) => {
+							{loading ? (
+								<tr>
+									<td colSpan={4} className="px-4 py-6 text-center text-foreground/30 text-sm">
+										Loading leaderboard...
+									</td>
+								</tr>
+							) : error ? (
+								<tr>
+									<td colSpan={4} className="px-4 py-6 text-center text-red-400 text-sm">
+										{error}
+									</td>
+								</tr>
+							) : filtered.length > 0 ? filtered.map((user) => {
 								const globalRank = sorted.indexOf(user);
 								return (
 									<tr
@@ -143,23 +118,25 @@ export default function Leaderboard() {
 							}) : (
 								<tr>
 									<td colSpan={4} className="px-4 py-6 text-center text-foreground/30 text-sm">
-										No users found matching "{search}"
+										No users found matching &#34;{search}&#34;
 									</td>
 								</tr>
 							)}
 							</tbody>
-							<tfoot>
-							<tr className="border-t border-foreground/10 bg-foreground/5">
-								<td colSpan={4} className="px-4 py-3 text-xs text-foreground/40">
-									{users.length} users total · Survived the longest: <span
-									className="text-secondary">{sorted[0].username}</span> with {formatMs(sorted[0].time)}
-								</td>
-							</tr>
-							</tfoot>
+							{!loading && !error && sorted.length > 0 && (
+								<tfoot>
+								<tr className="border-t border-foreground/10 bg-foreground/5">
+									<td colSpan={4} className="px-4 py-3 text-xs text-foreground/40">
+										{users.length} users total · Survived the longest:{" "}
+										<span className="text-secondary">{sorted[0].username}</span>{" "}
+										with {formatMs(sorted[0].time)}
+									</td>
+								</tr>
+								</tfoot>
+							)}
 						</table>
 					</div>
 				</section>
-
 			</main>
 		</div>
 	);
