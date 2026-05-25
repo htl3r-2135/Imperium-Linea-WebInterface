@@ -125,7 +125,6 @@ export default function InstallPage() {
                                     ["OS",      "Windows 11"],
                                     ["Size",    downloadSize],
                                     ["Version", loading ? "…" : versionLabel],
-                                    ["Team",    "Eisenstadt"],
                                 ].map(([label, value]) => (
                                     <p key={label} className="font-mono text-[11px] text-neutral-600">
                                         {label}: <span className="text-neutral-500">{value}</span>
