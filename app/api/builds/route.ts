@@ -3,7 +3,7 @@ import { createHmac, timingSafeEqual, createHash } from "crypto";
 import fs from "fs/promises";
 import path from "path";
 
-const SECRET = process.env.HMAC_SECRET!;
+const SECRET = process.env.LEADERBOARD_SECRET!;
 
 const UPLOAD_ROOT =
 	process.env.BUILD_STORAGE ??
