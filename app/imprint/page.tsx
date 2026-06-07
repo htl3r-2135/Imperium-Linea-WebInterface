@@ -40,25 +40,13 @@ export default function ImprintPage() {
 						<p className="text-[10px] uppercase tracking-widest text-neutral-600 mb-1">
 							Medieninhaber & Diensteanbieter
 						</p>
-						<Row label="Name"    value="[Name]" />
-						<Row label="Adresse" value="[Straße], [PLZ] [Ort], Österreich" />
+						<Row label="Name"    value="Höhere Technische Bundeslehranstalt Wien 3" />
+						<Row label="Adresse" value="Rennweg 89B, 1030, Wien, Österreich" />
 						<Row label="E-Mail"  value={
 							<a href="mailto:contact@example.com" className="text-[#00ff00] hover:underline">
-								contact@example.com
+								contact@ili.com
 							</a>
 						} />
-					</section>
-
-					<div className="border-t border-[#222]" />
-
-					<section className="flex flex-col gap-4">
-						<p className="text-[10px] uppercase tracking-widest text-neutral-600 mb-1">
-							Zweck
-						</p>
-						<Row
-							label="Tätigkeit"
-							value="Entwicklung und Vertrieb von Computerspielen (privat / nicht-kommerziell)"
-						/>
 					</section>
 
 					<div className="border-t border-[#222]" />

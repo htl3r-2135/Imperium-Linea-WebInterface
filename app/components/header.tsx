@@ -9,7 +9,7 @@ export default function Header() {
     const linkClass = (href: string) =>
         `px-4 py-2 rounded-md text-sm transition-colors duration-150 ${
             pathname === href && pathname !== "/"
-                ? "text-secondary bg-secondary/10 font-medium"
+                ? "text-secondary bg-secondary/10 font-semibold"
                 : "text-primary dark:primary hover:text-primary hover:bg-primary/10"
         }`
 
@@ -22,13 +22,17 @@ export default function Header() {
                     <div className="flex items-center gap-2">
                         <Image src="/ILI.png" alt="Imperium Linea Interface logo" width={24} height={24} />
                         <span className="text-sm font-semibold tracking-widest uppercase text-zinc-800 dark:text-zinc-100">
-                            I.L.I Imperium Linea Interface
+                            I.L.I
                         </span>
                     </div>
                 </Link>
 
                 {/* Nav links */}
                 <nav className="flex items-center gap-1">
+                    <Link href="/help" className={linkClass("/help")}>
+                        Help
+                    </Link>
+                    <div className="w-px h-4 bg-primary/20" />
                     <Link href="/install" className={linkClass("/install")}>
                         Install
                     </Link>
@@ -37,7 +41,6 @@ export default function Header() {
                         Leaderboard
                     </Link>
                 </nav>
-
             </div>
         </header>
     )

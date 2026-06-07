@@ -41,7 +41,7 @@ export default function AboutPage() {
 					<section>
 						<p className="text-[10px] uppercase tracking-widest text-neutral-600 mb-3">Contact</p>
 						<p>
-							For inquiries/bug reports, don't reach out to us. We don't have the budget for bugs, so we don't have bugs.
+							For inquiries/bug reports, reach us at contact@ili.com
 						</p>
 					</section>
 

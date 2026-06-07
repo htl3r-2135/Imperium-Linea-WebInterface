@@ -1,6 +1,6 @@
 param(
-    [string]$Name      = "PlayerOne",
-    [long]  $Score     = 9999,
+    [string]$Name      = "TungTungTungSahur",
+    [long]  $Score     = 16700,
     [string]$EnvFile   = ".\.env",
     [string]$Url       = $null
 )

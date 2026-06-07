@@ -2,7 +2,7 @@ import Header from "@/app/components/header";
 import Footer from "@/app/components/footer";
 
 export default function Home() {
-	return (<div className="flex flex-col min-h-screen bg-black font-sans">
+	return (<div className="flex flex-col min-h-screen bg-black font-mono">
 			<Header/>
 
 			{/* Hero — full-viewport video */}
@@ -11,7 +11,7 @@ export default function Home() {
 				{/* Video background */}
 				<video
 					className="absolute inset-0 w-full h-full object-cover opacity-60"
-					src="/videos/game_intro.mp4"
+					src="/videos/ILI_BG.mp4"
 					autoPlay
 					muted
 					loop
@@ -25,7 +25,7 @@ export default function Home() {
 				<div className="relative z-10 flex flex-col items-center text-center px-6 gap-6 max-w-2xl">
 					<h1
 						className="text-6xl sm:text-8xl font-bold tracking-tight text-white uppercase"
-						style={{fontFamily: "'Georgia', serif", letterSpacing: "0.08em"}}
+						style={{fontFamily: "'Cascadia Code'", letterSpacing: "0.08em"}}
 					>
 						I.L.I
 					</h1>
