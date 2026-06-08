@@ -29,6 +29,10 @@ export default function Header() {
 
                 {/* Nav links */}
                 <nav className="flex items-center gap-1">
+                    <Link href="/" className={linkClass("/")}>
+                        Home
+                    </Link>
+                    <div className="w-px h-4 bg-primary/20" />
                     <Link href="/help" className={linkClass("/help")}>
                         Help
                     </Link>
