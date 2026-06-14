@@ -107,7 +107,7 @@ export default function Leaderboard() {
 										<td className="px-4 py-3 text-foreground font-medium">{user.username}</td>
 										<td className="px-4 py-3 text-secondary font-mono">{formatMs(user.time)}</td>
 										<td className="px-4 py-3 text-foreground/60">
-											{new Date(user.timestamp).toLocaleDateString("en-GB", {
+											{new Date(user.createdAt).toLocaleDateString("en-GB", {
 												day: "2-digit",
 												month: "short",
 												year: "numeric",
