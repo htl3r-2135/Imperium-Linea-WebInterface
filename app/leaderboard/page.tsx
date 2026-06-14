@@ -96,7 +96,7 @@ export default function Leaderboard() {
 								const globalRank = sorted.indexOf(user);
 								return (
 									<tr
-										key={user.username}
+										key={user.id}
 										className="border-t border-foreground/10 hover:bg-foreground/5 transition-colors"
 									>
 										<td className="px-4 py-3 text-foreground/40 font-mono">
