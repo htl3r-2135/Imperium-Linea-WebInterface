@@ -11,7 +11,7 @@ export default function Home() {
 				{/* Video background */}
 				<video
 					className="absolute inset-0 w-full h-full object-cover opacity-60"
-					src="/videos/ILI_BG.mp4"
+					src="/videos/ILI_BG_FINAL_SLOWED.mp4"
 					autoPlay
 					muted
 					loop
